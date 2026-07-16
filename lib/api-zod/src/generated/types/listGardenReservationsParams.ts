@@ -6,7 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface PriorityRequest {
-  title: string;
-  description?: string;
-}
+export type ListGardenReservationsParams = {
+/**
+ * ISO date string (YYYY-MM-DD) for the Monday of the week
+ */
+weekStart: string;
+};
