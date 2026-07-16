@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "Eru5ZFBnz-u-YniR6QAtx"
+uri = "file://artifacts/garden-table/assets/images/icon.png"
+type = "image"
+title = "generated_image"

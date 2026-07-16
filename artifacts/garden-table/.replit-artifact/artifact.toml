@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/garden-table/"
+title = "Garden Table"
+version = "1.0.0"
+id = "artifacts/garden-table"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+name = "expo"
+paths = [ "/garden-table/" ]
+localPort = 21724
+
+[services.development]
+run = "pnpm --filter @workspace/garden-table run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/garden-table", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/garden-table", "run", "serve" ]
+
+[services.env]
+PORT = "21724"
+BASE_PATH = "/garden-table/"
