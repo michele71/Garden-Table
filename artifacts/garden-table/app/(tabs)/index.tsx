@@ -233,7 +233,7 @@ export default function HomeScreen() {
     },
     list: {
       paddingHorizontal: 20,
-      paddingBottom: Platform.OS === "web" ? 34 : insets.bottom + 24,
+      paddingBottom: Platform.OS === "web" ? 100 : insets.bottom + 90,
     },
     loadingContainer: {
       flex: 1,
