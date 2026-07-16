@@ -6,6 +6,7 @@ import React from "react";
 import { Platform, StyleSheet, View, useColorScheme } from "react-native";
 
 import { useColors } from "@/hooks/useColors";
+import { useMyFlat } from "@/contexts/MyFlatContext";
 
 export default function TabLayout() {
   const colors = useColors();
@@ -13,6 +14,7 @@ export default function TabLayout() {
   const isDark = colorScheme === "dark";
   const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
+  const { myBookingsCount } = useMyFlat();
 
   return (
     <Tabs
@@ -61,6 +63,14 @@ export default function TabLayout() {
         name="my-bookings"
         options={{
           title: "My Flat",
+          tabBarBadge: myBookingsCount > 0 ? myBookingsCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: colors.accent,
+            fontSize: 10,
+            minWidth: 16,
+            height: 16,
+            lineHeight: 16,
+          },
           tabBarIcon: ({ color, size }) =>
             isIOS ? (
               <SymbolView name="house.fill" tintColor={color} size={size} />

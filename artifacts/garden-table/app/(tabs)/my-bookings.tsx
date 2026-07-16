@@ -1,8 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Feather } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import * as Haptics from "expo-haptics";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -21,10 +20,10 @@ import {
   useListGardenReservations,
 } from "@workspace/api-client-react";
 
+import { useMyFlat } from "@/contexts/MyFlatContext";
 import { useColors } from "@/hooks/useColors";
 
 const FLATS = ["Flat 1", "Flat 2", "Flat 3", "Flat 4", "Flat 5", "Flat 6", "Flat 7"];
-const MY_FLAT_KEY = "garden_my_flat";
 
 function getWeekMonday(): string {
   const today = new Date();
@@ -51,25 +50,10 @@ export default function MyBookingsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
-
-  const [myFlat, setMyFlat] = useState<string | null>(null);
-  const [flatLoaded, setFlatLoaded] = useState(false);
+  const { myFlat, flatLoaded, selectFlat } = useMyFlat();
   const [refreshing, setRefreshing] = useState(false);
 
   const weekStart = useMemo(() => getWeekMonday(), []);
-
-  useEffect(() => {
-    AsyncStorage.getItem(MY_FLAT_KEY).then((val) => {
-      if (val) setMyFlat(val);
-      setFlatLoaded(true);
-    });
-  }, []);
-
-  const handleSelectFlat = useCallback(async (flat: string) => {
-    setMyFlat(flat);
-    await AsyncStorage.setItem(MY_FLAT_KEY, flat);
-    if (Platform.OS !== "web") Haptics.selectionAsync();
-  }, []);
 
   const { data: reservations = [], isLoading, refetch } = useListGardenReservations({ weekStart });
 
@@ -168,10 +152,10 @@ export default function MyBookingsScreen() {
       paddingBottom: Platform.OS === "web" ? 100 : insets.bottom + 90,
     },
     bookingCard: {
-      backgroundColor: colors.card,
+      backgroundColor: colors.accent + "12",
       borderRadius: colors.radius,
       borderWidth: 1.5,
-      borderColor: colors.primary + "66",
+      borderColor: colors.accent + "44",
       padding: 18,
       marginBottom: 12,
       flexDirection: "row",
@@ -182,7 +166,7 @@ export default function MyBookingsScreen() {
       width: 42,
       height: 42,
       borderRadius: 21,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.accent + "22",
       alignItems: "center",
       justifyContent: "center",
     },
@@ -272,7 +256,7 @@ export default function MyBookingsScreen() {
                   styles.flatBtn,
                   myFlat === flat ? styles.flatBtnSelected : styles.flatBtnUnselected,
                 ]}
-                onPress={() => handleSelectFlat(flat)}
+                onPress={() => selectFlat(flat)}
               >
                 <Text
                   style={[
@@ -317,7 +301,7 @@ export default function MyBookingsScreen() {
             myReservations.map((r) => (
               <View key={r.id} style={styles.bookingCard}>
                 <View style={styles.bookingIconWrap}>
-                  <Feather name="sun" size={18} color={colors.primary} />
+                  <Feather name="sun" size={18} color={colors.accent} />
                 </View>
                 <View style={styles.bookingInfo}>
                   <Text style={styles.bookingDate}>{formatDate(r.date)}</Text>
