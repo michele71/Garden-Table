@@ -71,10 +71,7 @@ export default function MyBookingsScreen() {
     if (Platform.OS !== "web") Haptics.selectionAsync();
   }, []);
 
-  const { data: reservations = [], isLoading, refetch } = useListGardenReservations(
-    { weekStart },
-    { query: { refetchOnWindowFocus: true } }
-  );
+  const { data: reservations = [], isLoading, refetch } = useListGardenReservations({ weekStart });
 
   const myReservations = useMemo(
     () => (myFlat ? reservations.filter((r) => r.name === myFlat) : []),

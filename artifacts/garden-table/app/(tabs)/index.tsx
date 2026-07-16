@@ -83,10 +83,7 @@ export default function HomeScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { data: reservations = [], isLoading, refetch } = useListGardenReservations(
-    { weekStart },
-    { query: { refetchOnWindowFocus: true } }
-  );
+  const { data: reservations = [], isLoading, refetch } = useListGardenReservations({ weekStart });
 
   const createMutation = useCreateGardenReservation({
     mutation: {

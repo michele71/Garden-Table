@@ -59,8 +59,8 @@ function serveManifest(platform, res) {
   const manifest = fs.readFileSync(manifestPath, "utf-8");
   res.writeHead(200, {
     "content-type": "application/json",
-    "expo-protocol-version": "1",
-    "expo-sfv-version": "0",
+    "expo-protocol-version": "0",
+    "cache-control": "no-store",
   });
   res.end(manifest);
 }
