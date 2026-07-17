@@ -1,6 +1,6 @@
-# [Project name]
+# Garden Table
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A shared garden booking app for 7 flats in a building — one slot per day, Mon–Sun, managed via an iOS mobile app.
 
 ## Run & Operate
 
