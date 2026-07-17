@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-
 import React, { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -27,6 +26,8 @@ import { ReservationSheet } from "@/components/ReservationSheet";
 import { useColors } from "@/hooks/useColors";
 
 const gardenBg = require("../../assets/images/garden-bg.jpg");
+const LinearGradient =
+  Platform.OS !== "web" ? require("expo-linear-gradient").LinearGradient : null;
 
 function getWeekMonday(): string {
   const today = new Date();
@@ -244,15 +245,30 @@ export default function HomeScreen() {
       <StatusBar barStyle="light-content" />
 
       <ImageBackground source={gardenBg} style={styles.hero} resizeMode="cover">
-        <View style={[styles.heroGradient, { backgroundColor: "rgba(20,40,20,0.68)" }]}>
-          <View style={styles.pillRow}>
-            <View style={styles.pill}>
-              <Text style={styles.pillText}>🌿 Evening slot</Text>
+        {LinearGradient ? (
+          <LinearGradient
+            colors={["rgba(0,0,0,0.15)", "rgba(20,40,20,0.82)"]}
+            style={styles.heroGradient}
+          >
+            <View style={styles.pillRow}>
+              <View style={styles.pill}>
+                <Text style={styles.pillText}>🌿 Evening slot</Text>
+              </View>
             </View>
+            <Text style={styles.heroTitle}>The Garden Table</Text>
+            <Text style={styles.heroSubtitle}>{weekLabel}</Text>
+          </LinearGradient>
+        ) : (
+          <View style={[styles.heroGradient, { backgroundColor: "rgba(20,40,20,0.68)" }]}>
+            <View style={styles.pillRow}>
+              <View style={styles.pill}>
+                <Text style={styles.pillText}>🌿 Evening slot</Text>
+              </View>
+            </View>
+            <Text style={styles.heroTitle}>The Garden Table</Text>
+            <Text style={styles.heroSubtitle}>{weekLabel}</Text>
           </View>
-          <Text style={styles.heroTitle}>The Garden Table</Text>
-          <Text style={styles.heroSubtitle}>{weekLabel}</Text>
-        </View>
+        )}
       </ImageBackground>
 
       <ScrollView
