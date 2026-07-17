@@ -20,7 +20,7 @@ interface Props {
   visible: boolean;
   timeSlot: string;
   displayTime: string;
-  onConfirm: (name: string, partySize: number) => void;
+  onConfirm: (name: string, partySize: number, isPrivate: boolean) => void;
   onClose: () => void;
 }
 
@@ -29,6 +29,7 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
   const insets = useSafeAreaInsets();
   const [selectedFlat, setSelectedFlat] = useState<string | null>(null);
   const [partySize, setPartySize] = useState(2);
+  const [isPrivate, setIsPrivate] = useState(false);
   const [flatError, setFlatError] = useState(false);
   const slideAnim = useRef(new Animated.Value(400)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -37,6 +38,7 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
     if (visible) {
       setSelectedFlat(null);
       setPartySize(2);
+      setIsPrivate(false);
       setFlatError(false);
       Animated.parallel([
         Animated.timing(fadeAnim, { toValue: 1, duration: 220, useNativeDriver: true }),
@@ -56,6 +58,11 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
     if (Platform.OS !== "web") Haptics.selectionAsync();
   }, []);
 
+  const handleTogglePrivacy = useCallback((value: boolean) => {
+    setIsPrivate(value);
+    if (Platform.OS !== "web") Haptics.selectionAsync();
+  }, []);
+
   const handleConfirm = useCallback(() => {
     if (!selectedFlat) {
       setFlatError(true);
@@ -63,8 +70,8 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
       return;
     }
     if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    onConfirm(selectedFlat, partySize);
-  }, [selectedFlat, partySize, onConfirm]);
+    onConfirm(selectedFlat, partySize, isPrivate);
+  }, [selectedFlat, partySize, isPrivate, onConfirm]);
 
   const adjustParty = useCallback((delta: number) => {
     setPartySize((prev) => Math.max(1, Math.min(8, prev + delta)));
@@ -191,7 +198,7 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
       flexDirection: "row",
       alignItems: "center",
       gap: 20,
-      marginBottom: 32,
+      marginBottom: 24,
     },
     partyBtn: {
       width: 44,
@@ -211,6 +218,46 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
     partyUnit: {
       fontSize: 14,
       fontFamily: "Inter_400Regular",
+      color: colors.mutedForeground,
+    },
+    privacyLabel: {
+      fontSize: 13,
+      fontFamily: "Inter_500Medium",
+      color: colors.mutedForeground,
+      marginBottom: 12,
+      textTransform: "uppercase",
+      letterSpacing: 0.6,
+    },
+    privacyToggle: {
+      flexDirection: "row",
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+      overflow: "hidden",
+      marginBottom: 28,
+    },
+    privacyOption: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 7,
+      paddingVertical: 12,
+    },
+    privacyOptionActive: {
+      backgroundColor: colors.primary,
+    },
+    privacyOptionInactive: {
+      backgroundColor: colors.background,
+    },
+    privacyOptionText: {
+      fontSize: 14,
+      fontFamily: "Inter_600SemiBold",
+    },
+    privacyOptionTextActive: {
+      color: colors.primaryForeground,
+    },
+    privacyOptionTextInactive: {
       color: colors.mutedForeground,
     },
     confirmBtn: {
@@ -292,6 +339,52 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
             <Text style={styles.partyUnit}>
               {partySize === 1 ? "guest" : "guests"}
             </Text>
+          </View>
+
+          <Text style={styles.privacyLabel}>Table access</Text>
+          <View style={styles.privacyToggle}>
+            <Pressable
+              style={[
+                styles.privacyOption,
+                !isPrivate ? styles.privacyOptionActive : styles.privacyOptionInactive,
+              ]}
+              onPress={() => handleTogglePrivacy(false)}
+            >
+              <Feather
+                name="users"
+                size={15}
+                color={!isPrivate ? colors.primaryForeground : colors.mutedForeground}
+              />
+              <Text
+                style={[
+                  styles.privacyOptionText,
+                  !isPrivate ? styles.privacyOptionTextActive : styles.privacyOptionTextInactive,
+                ]}
+              >
+                Open
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[
+                styles.privacyOption,
+                isPrivate ? styles.privacyOptionActive : styles.privacyOptionInactive,
+              ]}
+              onPress={() => handleTogglePrivacy(true)}
+            >
+              <Feather
+                name="lock"
+                size={15}
+                color={isPrivate ? colors.primaryForeground : colors.mutedForeground}
+              />
+              <Text
+                style={[
+                  styles.privacyOptionText,
+                  isPrivate ? styles.privacyOptionTextActive : styles.privacyOptionTextInactive,
+                ]}
+              >
+                Private
+              </Text>
+            </Pressable>
           </View>
 
           <Pressable style={styles.confirmBtn} onPress={handleConfirm}>

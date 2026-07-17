@@ -112,7 +112,7 @@ components:
 
     GardenReservation:
       type: object
-      required: [id, date, name, partySize, createdAt]
+      required: [id, date, name, partySize, isPrivate, createdAt]
       properties:
         id:
           type: integer
@@ -123,6 +123,9 @@ components:
           type: string
         partySize:
           type: integer
+        isPrivate:
+          type: boolean
+          description: Whether the booking is private (other neighbours cannot join)
         createdAt:
           type: string
 
@@ -151,3 +154,6 @@ components:
           type: integer
           minimum: 1
           maximum: 8
+        isPrivate:
+          type: boolean
+          description: Whether the booking is private (defaults to false)

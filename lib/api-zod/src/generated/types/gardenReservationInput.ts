@@ -16,4 +16,6 @@ export interface GardenReservationInput {
      * @maximum 8
      */
   partySize: number;
+  /** Whether the booking is private (defaults to false) */
+  isPrivate?: boolean;
 }

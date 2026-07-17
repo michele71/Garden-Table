@@ -210,6 +210,20 @@ export function DayCard({ date, reservation, isToday, isPast, onBook, onCancel }
                   <Text style={styles.guestText}>
                     {reservation.partySize} {reservation.partySize === 1 ? "guest" : "guests"}
                   </Text>
+                  <Text style={styles.guestText}> · </Text>
+                  <Feather
+                    name={reservation.isPrivate ? "lock" : "users"}
+                    size={11}
+                    color={reservation.isPrivate ? colors.mutedForeground : colors.accent}
+                  />
+                  <Text
+                    style={[
+                      styles.guestText,
+                      !reservation.isPrivate && { color: colors.accent },
+                    ]}
+                  >
+                    {reservation.isPrivate ? "Private" : "Open"}
+                  </Text>
                 </View>
               </>
             ) : (

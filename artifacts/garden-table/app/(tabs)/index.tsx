@@ -112,10 +112,10 @@ export default function HomeScreen() {
   }, []);
 
   const handleConfirm = useCallback(
-    async (name: string, partySize: number) => {
+    async (name: string, partySize: number, isPrivate: boolean) => {
       if (!selectedDate) return;
       setSheetVisible(false);
-      createMutation.mutate({ data: { date: selectedDate, name, partySize } });
+      createMutation.mutate({ data: { date: selectedDate, name, partySize, isPrivate } });
     },
     [selectedDate, createMutation]
   );

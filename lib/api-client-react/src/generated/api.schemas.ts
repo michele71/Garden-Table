@@ -15,6 +15,8 @@ export interface GardenReservation {
   date: string;
   name: string;
   partySize: number;
+  /** Whether the booking is private (other neighbours cannot join) */
+  isPrivate: boolean;
   createdAt: string;
 }
 
@@ -35,6 +37,8 @@ export interface GardenReservationInput {
      * @maximum 8
      */
   partySize: number;
+  /** Whether the booking is private (defaults to false) */
+  isPrivate?: boolean;
 }
 
 export type ListGardenReservationsParams = {

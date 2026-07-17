@@ -95,10 +95,11 @@ router.post("/garden/reservations", async (req, res): Promise<void> => {
     day: "numeric",
     month: "short",
   });
+  const privacy = parsed.data.isPrivate ? "Private booking" : "Open to neighbours 👋";
   sendPushToOtherFlats(
     parsed.data.name,
     "Garden booked 🌿",
-    `${parsed.data.name} booked ${dayName}`
+    `${parsed.data.name} booked ${dayName} · ${privacy}`
   ).catch(() => {});
 
   res.status(201).json(reservation);

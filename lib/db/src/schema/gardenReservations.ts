@@ -1,4 +1,4 @@
-import { date, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, date, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -7,6 +7,7 @@ export const gardenReservationsTable = pgTable("garden_reservations", {
   date: date("date", { mode: "string" }).notNull().unique(),
   name: text("name").notNull(),
   partySize: integer("party_size").notNull(),
+  isPrivate: boolean("is_private").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
