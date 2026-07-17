@@ -1,0 +1,1 @@
+- [Expo pnpm broken modules](expo-pnpm-broken-modules.md) — expo-symbols and expo-blur resolve to undefined in pnpm web builds; replace with Feather icons and plain View respectively

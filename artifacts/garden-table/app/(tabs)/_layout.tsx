@@ -1,17 +1,13 @@
 import { Feather } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform, StyleSheet, View, useColorScheme } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useColors } from "@/hooks/useColors";
 import { useMyFlat } from "@/contexts/MyFlatContext";
 
 export default function TabLayout() {
   const colors = useColors();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-  const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
   const { myBookingsCount } = useMyFlat();
 
@@ -23,23 +19,16 @@ export default function TabLayout() {
         tabBarInactiveTintColor: colors.mutedForeground,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: isIOS ? "transparent" : colors.background,
+          backgroundColor: colors.background,
           borderTopWidth: isWeb ? 1 : 0,
           borderTopColor: colors.border,
           elevation: 0,
         },
-        tabBarBackground: () =>
-          isIOS ? (
-            <BlurView
-              intensity={95}
-              tint={isDark ? "dark" : "light"}
-              style={StyleSheet.absoluteFill}
-            />
-          ) : (
-            <View
-              style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]}
-            />
-          ),
+        tabBarBackground: () => (
+          <View
+            style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]}
+          />
+        ),
         tabBarLabelStyle: {
           fontFamily: "Inter_500Medium",
           fontSize: 11,
