@@ -1,7 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
-import { SymbolView } from "expo-symbols";
 import React from "react";
 import { Platform, StyleSheet, View, useColorScheme } from "react-native";
 
@@ -51,12 +50,9 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "This Week",
-          tabBarIcon: ({ color, size }) =>
-            isIOS ? (
-              <SymbolView name="calendar" tintColor={color} size={size} />
-            ) : (
-              <Feather name="calendar" size={size} color={color} />
-            ),
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="calendar" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -71,12 +67,9 @@ export default function TabLayout() {
             height: 16,
             lineHeight: 16,
           },
-          tabBarIcon: ({ color, size }) =>
-            isIOS ? (
-              <SymbolView name="house.fill" tintColor={color} size={size} />
-            ) : (
-              <Feather name="home" size={size} color={color} />
-            ),
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="home" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
