@@ -216,6 +216,19 @@ export const CreateGardenReservationBody = zod.object({
 
 
 /**
+ * @summary Register or update a device push token for a flat
+ */
+
+
+
+
+export const RegisterGardenTokenBody = zod.object({
+  "flat": zod.string().min(1),
+  "token": zod.string().min(1)
+})
+
+
+/**
  * @summary Cancel a reservation
  */
 export const DeleteGardenReservationParams = zod.object({

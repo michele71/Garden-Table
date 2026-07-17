@@ -6,16 +6,23 @@ const workspaceRoot = path.resolve(projectRoot, "../..");
 
 const config = getDefaultConfig(projectRoot);
 
-// Let Metro watch the whole monorepo so it can resolve workspace packages
+// Watch the entire monorepo so Metro can reach workspace libs and pnpm store
 config.watchFolders = [workspaceRoot];
 
-// Tell Metro where to look for node_modules in pnpm's non-flat layout
+// Look for node_modules in both the artifact and the workspace root
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
   path.resolve(workspaceRoot, "node_modules"),
 ];
 
-// pnpm uses symlinks — make sure Metro follows them
+// Needed for workspace packages that use the "exports" field (e.g. api-client-react)
+config.resolver.unstable_enablePackageExports = true;
+
+// Follow pnpm symlinks in both the resolver and the file watcher
 config.resolver.unstable_enableSymlinks = true;
+config.watcher = {
+  ...config.watcher,
+  unstable_enableSymlinks: true,
+};
 
 module.exports = config;

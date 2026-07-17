@@ -22,6 +22,7 @@ import type {
 import type {
   GardenReservation,
   GardenReservationInput,
+  GardenTokenInput,
   HealthStatus,
   ListGardenReservationsParams,
   ListTasksParams,
@@ -945,6 +946,77 @@ export const useCreateGardenReservation = <TError = ErrorType<void>,
         TContext
       > => {
       return useMutation(getCreateGardenReservationMutationOptions(options));
+    }
+
+export const getRegisterGardenTokenUrl = () => {
+
+
+
+
+  return `/api/garden/tokens`
+}
+
+/**
+ * @summary Register or update a device push token for a flat
+ */
+export const registerGardenToken = async (gardenTokenInput: GardenTokenInput, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getRegisterGardenTokenUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      gardenTokenInput,)
+  }
+);}
+
+
+
+
+export const getRegisterGardenTokenMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerGardenToken>>, TError,{data: BodyType<GardenTokenInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerGardenToken>>, TError,{data: BodyType<GardenTokenInput>}, TContext> => {
+
+const mutationKey = ['registerGardenToken'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerGardenToken>>, {data: BodyType<GardenTokenInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerGardenToken(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterGardenTokenMutationResult = NonNullable<Awaited<ReturnType<typeof registerGardenToken>>>
+    export type RegisterGardenTokenMutationBody = BodyType<GardenTokenInput>
+    export type RegisterGardenTokenMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Register or update a device push token for a flat
+ */
+export const useRegisterGardenToken = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerGardenToken>>, TError,{data: BodyType<GardenTokenInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof registerGardenToken>>,
+        TError,
+        {data: BodyType<GardenTokenInput>},
+        TContext
+      > => {
+      return useMutation(getRegisterGardenTokenMutationOptions(options));
     }
 
 export const getDeleteGardenReservationUrl = (id: number,) => {

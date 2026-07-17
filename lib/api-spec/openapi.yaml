@@ -246,6 +246,21 @@ paths:
         "409":
           description: Date already reserved
 
+  /garden/tokens:
+    post:
+      operationId: registerGardenToken
+      tags: [garden]
+      summary: Register or update a device push token for a flat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GardenTokenInput"
+      responses:
+        "204":
+          description: Token registered
+
   /garden/reservations/{id}:
     delete:
       operationId: deleteGardenReservation
@@ -393,6 +408,17 @@ components:
           type: integer
         createdAt:
           type: string
+
+    GardenTokenInput:
+      type: object
+      required: [flat, token]
+      properties:
+        flat:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
 
     GardenReservationInput:
       type: object

@@ -8,6 +8,7 @@
 
 export * from './gardenReservation';
 export * from './gardenReservationInput';
+export * from './gardenTokenInput';
 export * from './healthStatus';
 export * from './listGardenReservationsParams';
 export * from './listTasksParams';

@@ -120,6 +120,13 @@ export interface GardenReservation {
   createdAt: string;
 }
 
+export interface GardenTokenInput {
+  /** @minLength 1 */
+  flat: string;
+  /** @minLength 1 */
+  token: string;
+}
+
 export interface GardenReservationInput {
   /** ISO date string (YYYY-MM-DD) */
   date: string;

@@ -12,6 +12,8 @@ import { Platform } from "react-native";
 
 import { useListGardenReservations } from "@workspace/api-client-react";
 
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+
 const MY_FLAT_KEY = "garden_my_flat";
 
 function getWeekMonday(): string {
@@ -58,6 +60,8 @@ export function MyFlatProvider({ children }: { children: React.ReactNode }) {
     await AsyncStorage.setItem(MY_FLAT_KEY, flat);
     if (Platform.OS !== "web") Haptics.selectionAsync();
   }, []);
+
+  usePushNotifications(myFlat);
 
   const { data: reservations = [] } = useListGardenReservations({ weekStart });
 
