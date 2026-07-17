@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { LinearGradient } from "expo-linear-gradient";
+
 import React, { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -244,10 +244,7 @@ export default function HomeScreen() {
       <StatusBar barStyle="light-content" />
 
       <ImageBackground source={gardenBg} style={styles.hero} resizeMode="cover">
-        <LinearGradient
-          colors={["rgba(0,0,0,0.15)", "rgba(20,40,20,0.82)"]}
-          style={styles.heroGradient}
-        >
+        <View style={[styles.heroGradient, { backgroundColor: "rgba(20,40,20,0.68)" }]}>
           <View style={styles.pillRow}>
             <View style={styles.pill}>
               <Text style={styles.pillText}>🌿 Evening slot</Text>
@@ -255,7 +252,7 @@ export default function HomeScreen() {
           </View>
           <Text style={styles.heroTitle}>The Garden Table</Text>
           <Text style={styles.heroSubtitle}>{weekLabel}</Text>
-        </LinearGradient>
+        </View>
       </ImageBackground>
 
       <ScrollView
