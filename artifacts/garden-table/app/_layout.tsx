@@ -16,7 +16,11 @@ import { setBaseUrl } from "@workspace/api-client-react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { MyFlatProvider } from "@/contexts/MyFlatContext";
 
-setBaseUrl(`https://${process.env.EXPO_PUBLIC_DOMAIN}`);
+const _domain = process.env.EXPO_PUBLIC_DOMAIN;
+if (_domain) {
+  const _isLocal = _domain.startsWith("localhost") || _domain.startsWith("127.") || _domain.startsWith("192.168.");
+  setBaseUrl(`${_isLocal ? "http" : "https"}://${_domain}`);
+}
 
 SplashScreen.preventAutoHideAsync();
 
