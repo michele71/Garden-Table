@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @workspace/garden-table run build:web && echo '=== repo root dist? ===' && ls dist 2>/dev/null || echo NONE && echo '=== package dist? ===' && ls artifacts/garden-table/dist 2>/dev/null || echo NONE",
+  "buildCommand": "pnpm install --frozen-lockfile && export VERCEL_DIST=$(pwd)/dist && pnpm --filter @workspace/garden-table run build:web",
   "outputDirectory": "dist",
   "installCommand": "echo skip",
   "framework": null
