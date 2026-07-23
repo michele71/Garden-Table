@@ -1,0 +1,1 @@
+{"version":3,"file":"taskStatsByPriority.d.ts","sourceRoot":"","sources":["../../../src/generated/types/taskStatsByPriority.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,MAAM,mBAAmB,GAAG;IAChC,GAAG,EAAE,MAAM,CAAC;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,IAAI,EAAE,MAAM,CAAC;IACb,MAAM,EAAE,MAAM,CAAC;CAChB,CAAC"}
