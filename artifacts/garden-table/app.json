@@ -14,10 +14,15 @@
       "backgroundColor": "#F5F2EB"
     },
     "ios": {
-      "bundleIdentifier": "com.mfarrugg.gardentable"
-      "supportsTablet": false
+      "bundleIdentifier": "com.mfarrugg.gardentable",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
-    "android": {},
+    "android": {
+      "package": "com.mfarrugg.gardentable"
+    },
     "web": {
       "favicon": "./assets/images/icon.png"
     },
@@ -34,6 +39,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a2e04557-eb7a-4f9f-9c3b-7cecc743e6b8"
+      }
     }
   }
 }

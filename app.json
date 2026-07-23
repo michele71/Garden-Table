@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "3ba947da-dc7c-461d-8ee0-ef3a24b0f4c7"
+      }
+    },
+    "android": {
+      "package": "com.mfarruggio.workspace"
+    },
+    "ios": {
+      "bundleIdentifier": "com.mfarruggio.workspace",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}
