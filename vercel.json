@@ -1,6 +1,6 @@
 {
-  "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @workspace/garden-table run build:web",
-  "outputDirectory": "public",
+  "buildCommand": "bash build-web.sh",
+  "outputDirectory": "dist",
   "installCommand": "echo skip",
   "framework": null
 }
