@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install --frozen-lockfile && npx expo export --platform web --output-dir dist",
+  "buildCommand": "pnpm install --frozen-lockfile && pnpm exec expo export --platform web --output-dir dist",
   "outputDirectory": "dist",
   "installCommand": "echo skip",
   "framework": null
