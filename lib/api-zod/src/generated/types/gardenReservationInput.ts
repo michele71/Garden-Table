@@ -5,10 +5,13 @@
  * Garden Table API
  * OpenAPI spec version: 0.1.0
  */
+import type { GardenReservationInputSlot } from './gardenReservationInputSlot';
 
 export interface GardenReservationInput {
   /** ISO date string (YYYY-MM-DD) */
   date: string;
+  /** Time slot within the day (defaults to evening) */
+  slot?: GardenReservationInputSlot;
   /** @minLength 1 */
   name: string;
   /**

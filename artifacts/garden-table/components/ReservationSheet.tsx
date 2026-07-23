@@ -19,12 +19,13 @@ const FLATS = ["Flat 1", "Flat 2", "Flat 3", "Flat 4", "Flat 5", "Flat 6", "Flat
 interface Props {
   visible: boolean;
   timeSlot: string;
+  slot: "lunch" | "evening";
   displayTime: string;
   onConfirm: (name: string, partySize: number, isPrivate: boolean) => void;
   onClose: () => void;
 }
 
-export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, onClose }: Props) {
+export function ReservationSheet({ visible, timeSlot, slot, displayTime, onConfirm, onClose }: Props) {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const [selectedFlat, setSelectedFlat] = useState<string | null>(null);
@@ -78,6 +79,9 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
     if (Platform.OS !== "web") Haptics.selectionAsync();
   }, []);
 
+  const slotLabel = slot === "lunch" ? "Lunch slot" : "Evening slot";
+  const slotIcon = slot === "lunch" ? "sun" : "moon";
+
   const styles = StyleSheet.create({
     backdrop: { flex: 1, backgroundColor: "rgba(0,0,0,0.45)", justifyContent: "flex-end" },
     sheet: {
@@ -107,6 +111,11 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
       alignItems: "center",
       justifyContent: "center",
     },
+    slotTagRow: {
+      flexDirection: "row",
+      gap: 8,
+      marginBottom: 20,
+    },
     slotTag: {
       flexDirection: "row",
       alignItems: "center",
@@ -116,12 +125,26 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
       paddingHorizontal: 12,
       paddingVertical: 6,
       borderRadius: 20,
-      marginBottom: 20,
     },
     slotTagText: {
       fontSize: 14,
       fontFamily: "Inter_600SemiBold",
       color: colors.primary,
+    },
+    slotTimePill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      backgroundColor: slot === "lunch" ? colors.primary + "18" : colors.mutedForeground + "18",
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 20,
+      alignSelf: "flex-start",
+    },
+    slotTimePillText: {
+      fontSize: 14,
+      fontFamily: "Inter_600SemiBold",
+      color: slot === "lunch" ? colors.primary : colors.mutedForeground,
     },
     title: {
       fontSize: 22,
@@ -287,9 +310,15 @@ export function ReservationSheet({ visible, timeSlot, displayTime, onConfirm, on
 
           <View style={styles.handle} />
 
-          <View style={styles.slotTag}>
-            <Feather name="calendar" size={14} color={colors.primary} />
-            <Text style={styles.slotTagText}>{displayTime}</Text>
+          <View style={styles.slotTagRow}>
+            <View style={styles.slotTag}>
+              <Feather name="calendar" size={14} color={colors.primary} />
+              <Text style={styles.slotTagText}>{displayTime}</Text>
+            </View>
+            <View style={styles.slotTimePill}>
+              <Feather name={slotIcon as any} size={13} color={slot === "lunch" ? colors.primary : colors.mutedForeground} />
+              <Text style={styles.slotTimePillText}>{slotLabel}</Text>
+            </View>
           </View>
 
           <Text style={styles.title}>Reserve the table</Text>

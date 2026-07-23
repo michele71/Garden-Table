@@ -9,10 +9,23 @@ export interface HealthStatus {
   status: string;
 }
 
+/**
+ * Time slot within the day
+ */
+export type GardenReservationSlot = typeof GardenReservationSlot[keyof typeof GardenReservationSlot];
+
+
+export const GardenReservationSlot = {
+  lunch: 'lunch',
+  evening: 'evening',
+} as const;
+
 export interface GardenReservation {
   id: number;
   /** ISO date string (YYYY-MM-DD) */
   date: string;
+  /** Time slot within the day */
+  slot: GardenReservationSlot;
   name: string;
   partySize: number;
   /** Whether the booking is private (other neighbours cannot join) */
@@ -27,9 +40,22 @@ export interface GardenTokenInput {
   token: string;
 }
 
+/**
+ * Time slot within the day (defaults to evening)
+ */
+export type GardenReservationInputSlot = typeof GardenReservationInputSlot[keyof typeof GardenReservationInputSlot];
+
+
+export const GardenReservationInputSlot = {
+  lunch: 'lunch',
+  evening: 'evening',
+} as const;
+
 export interface GardenReservationInput {
   /** ISO date string (YYYY-MM-DD) */
   date: string;
+  /** Time slot within the day (defaults to evening) */
+  slot?: GardenReservationInputSlot;
   /** @minLength 1 */
   name: string;
   /**
