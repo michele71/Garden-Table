@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @workspace/garden-table run build:web",
+  "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @workspace/garden-table run build:web && (cp -r artifacts/garden-table/dist dist 2>/dev/null || true) && ls dist",
   "outputDirectory": "dist",
   "installCommand": "echo skip",
   "framework": null
