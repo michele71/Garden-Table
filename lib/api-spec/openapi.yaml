@@ -112,13 +112,17 @@ components:
 
     GardenReservation:
       type: object
-      required: [id, date, name, partySize, isPrivate, createdAt]
+      required: [id, date, slot, name, partySize, isPrivate, createdAt]
       properties:
         id:
           type: integer
         date:
           type: string
           description: ISO date string (YYYY-MM-DD)
+        slot:
+          type: string
+          enum: [lunch, evening]
+          description: Time slot within the day
         name:
           type: string
         partySize:
@@ -147,6 +151,10 @@ components:
         date:
           type: string
           description: ISO date string (YYYY-MM-DD)
+        slot:
+          type: string
+          enum: [lunch, evening]
+          description: Time slot within the day (defaults to evening)
         name:
           type: string
           minLength: 1

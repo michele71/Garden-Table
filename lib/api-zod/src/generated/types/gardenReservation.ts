@@ -5,11 +5,14 @@
  * Garden Table API
  * OpenAPI spec version: 0.1.0
  */
+import type { GardenReservationSlot } from './gardenReservationSlot';
 
 export interface GardenReservation {
   id: number;
   /** ISO date string (YYYY-MM-DD) */
   date: string;
+  /** Time slot within the day */
+  slot: GardenReservationSlot;
   name: string;
   partySize: number;
   /** Whether the booking is private (other neighbours cannot join) */

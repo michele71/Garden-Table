@@ -70,6 +70,14 @@ function getWeekLabel(weekStart: string): string {
   return `${monLabel} – ${sunLabel}`;
 }
 
+/** Mon=1 … Sun=0 in JS; returns true for Sat (6) and Sun (0) */
+function isWeekend(dateStr: string): boolean {
+  const dow = new Date(dateStr + "T12:00:00").getDay();
+  return dow === 0 || dow === 6;
+}
+
+type SlotEntry = { date: string; slot: "lunch" | "evening" };
+
 export default function HomeScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
@@ -80,8 +88,21 @@ export default function HomeScreen() {
   const weekDates = useMemo(() => getWeekDates(weekStart), [weekStart]);
   const weekLabel = useMemo(() => getWeekLabel(weekStart), [weekStart]);
 
+  // Expand dates into slot entries: weekdays get evening only, weekends get lunch + evening
+  const weekSlots = useMemo<SlotEntry[]>(() => {
+    return weekDates.flatMap((date) =>
+      isWeekend(date)
+        ? [
+            { date, slot: "lunch" as const },
+            { date, slot: "evening" as const },
+          ]
+        : [{ date, slot: "evening" as const }]
+    );
+  }, [weekDates]);
+
   const [sheetVisible, setSheetVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<"lunch" | "evening">("evening");
   const [refreshing, setRefreshing] = useState(false);
 
   const { data: reservations = [], isLoading, refetch } = useListGardenReservations({ weekStart });
@@ -106,8 +127,9 @@ export default function HomeScreen() {
     },
   });
 
-  const handleBook = useCallback((date: string) => {
+  const handleBook = useCallback((date: string, slot: "lunch" | "evening") => {
     setSelectedDate(date);
+    setSelectedSlot(slot);
     setSheetVisible(true);
   }, []);
 
@@ -115,9 +137,11 @@ export default function HomeScreen() {
     async (name: string, partySize: number, isPrivate: boolean) => {
       if (!selectedDate) return;
       setSheetVisible(false);
-      createMutation.mutate({ data: { date: selectedDate, name, partySize, isPrivate } });
+      createMutation.mutate({
+        data: { date: selectedDate, slot: selectedSlot, name, partySize, isPrivate },
+      });
     },
-    [selectedDate, createMutation]
+    [selectedDate, selectedSlot, createMutation]
   );
 
   const handleCancel = useCallback(
@@ -133,16 +157,21 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, [refetch]);
 
-  const reservationByDate = useMemo(() => {
+  // Key reservations by "date-slot" for O(1) lookup
+  const reservationBySlot = useMemo(() => {
     const map = new Map<string, GardenReservation>();
     for (const r of reservations) {
-      map.set(r.date, r);
+      map.set(`${r.date}-${r.slot}`, r);
     }
     return map;
   }, [reservations]);
 
   const bookedCount = reservations.length;
-  const availableCount = weekDates.filter((d) => d >= todayKey && !reservationByDate.has(d)).length;
+  const availableCount = weekSlots.filter(
+    ({ date, slot }) =>
+      date >= todayKey && !reservationBySlot.has(`${date}-${slot}`)
+  ).length;
+  const totalSlots = weekSlots.length; // 9: 5 evening + 2 lunch + 2 evening on weekends
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -252,7 +281,7 @@ export default function HomeScreen() {
           >
             <View style={styles.pillRow}>
               <View style={styles.pill}>
-                <Text style={styles.pillText}>🌿 Evening slot</Text>
+                <Text style={styles.pillText}>🌿 Garden Table</Text>
               </View>
             </View>
             <Text style={styles.heroTitle}>The Garden Table</Text>
@@ -262,7 +291,7 @@ export default function HomeScreen() {
           <View style={[styles.heroGradient, { backgroundColor: "rgba(20,40,20,0.68)" }]}>
             <View style={styles.pillRow}>
               <View style={styles.pill}>
-                <Text style={styles.pillText}>🌿 Evening slot</Text>
+                <Text style={styles.pillText}>🌿 Garden Table</Text>
               </View>
             </View>
             <Text style={styles.heroTitle}>The Garden Table</Text>
@@ -291,8 +320,8 @@ export default function HomeScreen() {
             <Text style={styles.statLabel}>Reserved</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statNumber}>7</Text>
-            <Text style={styles.statLabel}>Total days</Text>
+            <Text style={styles.statNumber}>{totalSlots}</Text>
+            <Text style={styles.statLabel}>Total slots</Text>
           </View>
         </View>
 
@@ -306,11 +335,12 @@ export default function HomeScreen() {
               <ActivityIndicator color={colors.primary} />
             </View>
           ) : (
-            weekDates.map((date) => (
+            weekSlots.map(({ date, slot }) => (
               <DayCard
-                key={date}
+                key={`${date}-${slot}`}
                 date={date}
-                reservation={reservationByDate.get(date)}
+                slot={slot}
+                reservation={reservationBySlot.get(`${date}-${slot}`)}
                 isToday={date === todayKey}
                 isPast={date < todayKey}
                 onBook={handleBook}
@@ -325,6 +355,7 @@ export default function HomeScreen() {
         <ReservationSheet
           visible={sheetVisible}
           timeSlot={selectedDate}
+          slot={selectedSlot}
           displayTime={new Date(selectedDate + "T12:00:00").toLocaleDateString("en-GB", {
             weekday: "long",
             day: "numeric",

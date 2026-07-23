@@ -306,7 +306,7 @@ export default function MyBookingsScreen() {
                 <View style={styles.bookingInfo}>
                   <Text style={styles.bookingDate}>{formatDate(r.date)}</Text>
                   <Text style={styles.bookingGuests}>
-                    {r.partySize} {r.partySize === 1 ? "guest" : "guests"} · Evening slot
+                    {r.partySize} {r.partySize === 1 ? "guest" : "guests"} · {r.slot === "lunch" ? "Lunch slot" : "Evening slot"}
                   </Text>
                 </View>
                 <Pressable

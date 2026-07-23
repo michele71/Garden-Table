@@ -74,19 +74,26 @@ router.post("/garden/reservations", async (req, res): Promise<void> => {
     return;
   }
 
+  const slot = parsed.data.slot ?? "evening";
+
   const existing = await db
     .select()
     .from(gardenReservationsTable)
-    .where(eq(gardenReservationsTable.date, parsed.data.date));
+    .where(
+      and(
+        eq(gardenReservationsTable.date, parsed.data.date),
+        eq(gardenReservationsTable.slot, slot)
+      )
+    );
 
   if (existing.length > 0) {
-    res.status(409).json({ error: "This date is already reserved" });
+    res.status(409).json({ error: "This slot is already reserved" });
     return;
   }
 
   const [reservation] = await db
     .insert(gardenReservationsTable)
-    .values(parsed.data)
+    .values({ ...parsed.data, slot })
     .returning();
 
   // Fire-and-forget: notify other flats
@@ -95,11 +102,12 @@ router.post("/garden/reservations", async (req, res): Promise<void> => {
     day: "numeric",
     month: "short",
   });
+  const slotLabel = slot === "lunch" ? "Lunch" : "Evening";
   const privacy = parsed.data.isPrivate ? "Private booking" : "Open to neighbours 👋";
   sendPushToOtherFlats(
     parsed.data.name,
     "Garden booked 🌿",
-    `${parsed.data.name} booked ${dayName} · ${privacy}`
+    `${parsed.data.name} booked ${dayName} · ${slotLabel} · ${privacy}`
   ).catch(() => {});
 
   res.status(201).json(reservation);

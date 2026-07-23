@@ -9,10 +9,11 @@ import type { GardenReservation } from "@workspace/api-client-react";
 
 interface Props {
   date: string;
+  slot: "lunch" | "evening";
   reservation: GardenReservation | undefined;
   isToday: boolean;
   isPast: boolean;
-  onBook: (date: string) => void;
+  onBook: (date: string, slot: "lunch" | "evening") => void;
   onCancel: (id: number) => void;
 }
 
@@ -27,7 +28,7 @@ function formatDayLabel(dateStr: string): { day: string; dayNum: string; month: 
   };
 }
 
-export function DayCard({ date, reservation, isToday, isPast, onBook, onCancel }: Props) {
+export function DayCard({ date, slot, reservation, isToday, isPast, onBook, onCancel }: Props) {
   const colors = useColors();
   const scale = useSharedValue(1);
 
@@ -44,12 +45,14 @@ export function DayCard({ date, reservation, isToday, isPast, onBook, onCancel }
     if (reservation) {
       onCancel(reservation.id);
     } else {
-      onBook(date);
+      onBook(date, slot);
     }
-  }, [isPast, reservation, date, onBook, onCancel, scale]);
+  }, [isPast, reservation, date, slot, onBook, onCancel, scale]);
 
   const { day, dayNum, month } = formatDayLabel(date);
   const isBooked = !!reservation;
+  const slotLabel = slot === "lunch" ? "Lunch" : "Evening";
+  const slotIcon = slot === "lunch" ? "sun" : "moon";
 
   const styles = StyleSheet.create({
     card: {
@@ -105,6 +108,26 @@ export function DayCard({ date, reservation, isToday, isPast, onBook, onCancel }
     content: {
       flex: 1,
       gap: 4,
+    },
+    slotPill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      backgroundColor: slot === "lunch"
+        ? colors.primary + "18"
+        : colors.mutedForeground + "18",
+      paddingHorizontal: 7,
+      paddingVertical: 2,
+      borderRadius: 8,
+      alignSelf: "flex-start",
+      marginBottom: 2,
+    },
+    slotPillText: {
+      fontSize: 10,
+      fontFamily: "Inter_600SemiBold",
+      color: slot === "lunch" ? colors.primary : colors.mutedForeground,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
     },
     todayBadge: {
       backgroundColor: colors.secondary,
@@ -188,6 +211,11 @@ export function DayCard({ date, reservation, isToday, isPast, onBook, onCancel }
           </View>
 
           <View style={styles.content}>
+            <View style={styles.slotPill}>
+              <Feather name={slotIcon as any} size={9} color={slot === "lunch" ? colors.primary : colors.mutedForeground} />
+              <Text style={styles.slotPillText}>{slotLabel}</Text>
+            </View>
+
             {isToday && !isBooked && (
               <View style={styles.todayBadge}>
                 <Text style={styles.todayText}>TODAY</Text>

@@ -27,6 +27,7 @@ export const ListGardenReservationsQueryParams = zod.object({
 export const ListGardenReservationsResponseItem = zod.object({
   "id": zod.number(),
   "date": zod.string().describe('ISO date string (YYYY-MM-DD)'),
+  "slot": zod.enum(['lunch', 'evening']).describe('Time slot within the day'),
   "name": zod.string(),
   "partySize": zod.number(),
   "isPrivate": zod.boolean().describe('Whether the booking is private (other neighbours cannot join)'),
@@ -45,6 +46,7 @@ export const createGardenReservationBodyPartySizeMax = 8;
 
 export const CreateGardenReservationBody = zod.object({
   "date": zod.string().describe('ISO date string (YYYY-MM-DD)'),
+  "slot": zod.enum(['lunch', 'evening']).optional().describe('Time slot within the day (defaults to evening)'),
   "name": zod.string().min(1),
   "partySize": zod.number().min(1).max(createGardenReservationBodyPartySizeMax),
   "isPrivate": zod.boolean().optional().describe('Whether the booking is private (defaults to false)')
