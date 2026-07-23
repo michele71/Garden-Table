@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bash build-web.sh",
+  "buildCommand": "pnpm install --frozen-lockfile && REPO_ROOT=$(pwd) && cd artifacts/garden-table && npx expo export --platform web --output-dir \"$REPO_ROOT/dist\"",
   "outputDirectory": "dist",
   "installCommand": "echo skip",
   "framework": null
